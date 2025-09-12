@@ -2,23 +2,22 @@ import re
 import spacy
 from typing import List
 
-# Charger modèle spaCy FR
+
 nlp = spacy.load("fr_core_news_sm")
 
 EMOJI_PATTERN = re.compile(
     "["
-    "\U0001F600-\U0001F64F"  # emoticônes
-    "\U0001F300-\U0001F5FF"  # symboles et pictogrammes
-    "\U0001F680-\U0001F6FF"  # transport et symboles
-    "\U0001F1E0-\U0001F1FF"  # drapeaux
-    "\U00002700-\U000027BF"  # divers symboles
+    "\U0001F600-\U0001F64F"  
+    "\U0001F300-\U0001F5FF"  
+    "\U0001F680-\U0001F6FF"  
+    "\U0001F1E0-\U0001F1FF"  
+    "\U00002700-\U000027BF"  
     "\U000024C2-\U0001F251"
     "]+",
     flags=re.UNICODE
 )
 
 def basic_clean(text: str) -> str:
-    """Nettoyage basique avant NLP (URLs, mentions, hashtags, emojis, ponctuation inutile)."""
     text = text.lower()
     text = re.sub(r"http\S+|www\S+", "", text)   # URLs
     text = re.sub(r"@\w+", "", text)             # mentions
@@ -29,7 +28,7 @@ def basic_clean(text: str) -> str:
     return text
 
 def spacy_preprocess(text: str) -> str:
-    """Tokenisation, suppression des stopwords et lemmatisation avec spaCy."""
+    
     doc = nlp(text)
     tokens = [
         token.lemma_ for token in doc
@@ -38,7 +37,7 @@ def spacy_preprocess(text: str) -> str:
     return " ".join(tokens)
 
 def clean_text(text: str) -> str:
-    """Pipeline complet de nettoyage."""
+    
     text = basic_clean(text)
     text = spacy_preprocess(text)
     return text
